@@ -10,5 +10,10 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=3000
-      - DB_URL=file:/dist/db/db.sqlite
+      - DB_URL=file:dist/db/db.sqlite
     restart: unless-stopped
+    volumes:
+      - db-data:/dist/db
+
+volumes:
+  db-data:

@@ -8,7 +8,7 @@
     "start": "node dist/server.js",
     "dev": "tsx watch src/server.ts",
     "db:generate": "drizzle-kit generate",
-    "db:prod:migrate": "drizzle-kit push --dialect=sqlite --schema=./dist/db/schema.js --url=file:./dist/db/db.sqlite",
+    "db:prod:migrate": "drizzle-kit push --dialect=sqlite --schema=./dist/db/schema.js --url=file:dist/db/db.sqlite",
     "db:migrate": "drizzle-kit push",
     "db:seed": "tsx src/db/seed.ts",
     "generate-swagger": "tsx swaggerAutoGen.ts",
