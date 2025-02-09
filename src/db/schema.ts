@@ -1,6 +1,12 @@
 import { relations } from 'drizzle-orm';
 import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
+export enum productDiscountTypes {
+  BUY_X_PAY_Y = "BUY_X_PAY_Y",
+  BUNDLE = "BUNDLE",
+  BULK_DISCOUNT = "BULK_DISCOUNT",
+}
+
 export const products = sqliteTable("products", {
   sku: text().primaryKey(),
   name: text().notNull(),
@@ -21,10 +27,10 @@ export const productDiscounts = sqliteTable("product_discounts", {
   description: text().notNull(),
   source_product_sku: text().notNull(),
   target_product_sku: text().notNull(),
-  product_amount: int(),
+  source_product_units: int(),
   discount_percentage: int(),
   discount_unit: int(),
-  type: text(),
+  type: text().$type<`${productDiscountTypes}`>().notNull(),
 });
 export const productDiscountsRelations = relations(productDiscounts, ({ one }) => ({
   source_product: one(products, {

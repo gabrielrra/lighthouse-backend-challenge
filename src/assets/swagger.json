@@ -1,0 +1,111 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "My API",
+    "description": "Description",
+    "version": "1.0.0"
+  },
+  "host": "localhost:3000",
+  "basePath": "/api",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/v1/product/": {
+      "get": {
+        "description": "Get a list of products with pagination",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number",
+            "required": false,
+            "type": "integer",
+            "default": 1,
+            "minimum": 1
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Number of items per page",
+            "required": false,
+            "type": "integer",
+            "default": 10,
+            "minimum": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved products list"
+          },
+          "400": {
+            "description": "Invalid query parameters"
+          },
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/v1/product/{sku}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "sku",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/v1/cart/checkout": {
+      "post": {
+        "description": "Checkout cart products",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["sku", "quantity"],
+                "properties": {
+                  "sku": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "quantity": {
+                    "type": "number",
+                    "minimum": 1
+                  }
+                }
+              },
+              "minItems": 1,
+              "maxItems": 1000
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Checkout successful"
+          },
+          "400": {
+            "description": "Invalid request body"
+          }
+        }
+      }
+    }
+  }
+}

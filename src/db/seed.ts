@@ -30,27 +30,31 @@ const productsToInsert: Array<typeof products.$inferInsert> = [
 
 const discountsToInsert: Array<typeof productDiscounts.$inferInsert> = [
   {
-    id: 0,
+    id: 1,
     description: 'Buy 3 Google Homes for the price of 2!',
     source_product_sku: productsToInsert[0].sku,
     target_product_sku: productsToInsert[0].sku,
-    product_amount: 3,
-    discount_unit: 1
-  },
-  {
-    id: 1,
-    description: 'Each sale of a MacBook Pro comes with a free Raspberry Pi',
-    source_product_sku: productsToInsert[1].sku,
-    target_product_sku: productsToInsert[3].sku,
-    product_amount: 1,
+    source_product_units: 3,
+    discount_unit: 1,
+    type: "BUY_X_PAY_Y"
   },
   {
     id: 2,
+    description: 'Each sale of a MacBook Pro comes with a free Raspberry Pi',
+    source_product_sku: productsToInsert[1].sku,
+    target_product_sku: productsToInsert[3].sku,
+    source_product_units: 1,
+    discount_unit: 1,
+    type: "BUNDLE"
+  },
+  {
+    id: 3,
     description: 'Buying more than 3 Alexa Speakers will have a 10% discount on all Alexa speakers',
     source_product_sku: productsToInsert[2].sku,
     target_product_sku: productsToInsert[2].sku,
-    product_amount: 4,
+    source_product_units: 4,
     discount_percentage: 10,
+    type: "BULK_DISCOUNT"
   }
 ];
 async function run() {
