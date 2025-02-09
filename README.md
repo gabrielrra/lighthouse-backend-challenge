@@ -1,10 +1,31 @@
 # Lighthouse Backend Challenge
 
-## Overview
+A Node.js REST API for a simple checkout system that calculates the total price of a cart based on the products and discounts applied.
 
-- A product can be associated with multiple sales.
-- If a product has multiple sales, only the highest discount will be applied.
-- A sale applies to a single product and can either discount the same product or another product.
+The database chosen for this project is SQLite, which is a lightweight, serverless, and self-contained database engine. SQLite is ideal for small to medium-sized applications and is a good choice for this project.
+
+> In production, a more robust database like PostgreSQL or MySQL would be recommended.
+
+To interact with the database the project uses Drizzle, a lightweight ORM that provides a simple and intuitive API.
+
+## Project Structure
+
+To provide extensibility and maintainability, the project is structured into separate folders for controllers, services, routes, and validators. This separation of concerns makes it easier to manage and scale the project.
+
+Separating the routes by version allows for better API versioning and maintenance. This structure makes it easier to add new versions or deprecate old ones without affecting the entire codebase.
+
+```
+|-- src: The source code of the project.
+  |-- controllers: The route controllers.
+  |-- db: The database configuration, migrations and drizzle schema.
+  |-- middlewares: Custom middleware functions.
+  |-- routes: The route definitions separated by version.
+    |-- v1: API version 1 routes.
+  |-- services: The business logic.
+  |-- tests: Test files and fixtures.
+  |-- utils: Utility functions.
+  |-- validators: Request validation schemas (zod).
+```
 
 ## Setup
 
@@ -16,28 +37,6 @@ cp .env.example .env
 npm install
 npm run db:migrate && npm run db:seed
 ```
-
-## Discount Types
-
-### BUY_X_PAY_Y
-
-Buy **X** units of `source_product_sku` and pay for **Y** units of `target_product_sku`.
-
-- `source_product_sku` and `target_product_sku` must be the same.
-- **X** = `source_product_units`
-- **Y** = `source_product_units - discount_unit`
-
-### BUNDLE
-
-Buy **source_product_units** units of `source_product_sku` and receive **discount_unit** units of `target_product_sku` for free.
-
-### BULK_DISCOUNT
-
-Buy **at least** `source_product_units` units of `source_product_sku` and receive a `discount_percentage` discount on each unit of `source_product_sku`.
-
-## API Documentation (Swagger)
-
-In a production environment, exposing a Swagger Explorer route without proper security (e.g., VPN) is not recommended. However, for this assessment, it has been included for easier API usage.
 
 ## Running the Project
 
@@ -59,18 +58,11 @@ npm run dev  # Development mode
 npm run build && npm start
 ```
 
-## Testing
-
-Vitest is used for integration testing. The tests create a temporary SQLite database file, which is removed after execution.
-
-### Running Tests
-
-```bash
-npm install
-npm test
-```
-
 ## API Endpoints
+
+You can explore the API using Swagger UI by visiting `http://localhost:3000/`.
+
+You can also use any http client like `curl` or `Postman` to interact with the following endpoints:
 
 ### Products
 
@@ -135,6 +127,27 @@ curl -X POST http://localhost:3000/api/v1/cart/checkout \
   }'
 ```
 
+## Testing
+
+Vitest is used for integration testing. The tests create a temporary SQLite database file, which is removed after execution.
+
+### Running Tests
+
+```bash
+npm install
+npm test
+```
+
+## Notes
+
+- A product can be associated with multiple discounts but only the highest discount will be applied at checkout.
+- There are only 3 types of discounts available: `BUY_X_PAY_Y`, `BUNDLE`, and `BULK_DISCOUNT`.
+  - BUY_X_PAY_Y: Buy X units of a product and pay for Y units.
+  - BUNDLE: Buy X units of a product and get Y units of another product for free.
+  - BULK_DISCOUNT: Buy at least X units of a product and get a percent discount on each unit.
+- There are no routes for creating, updating, or deleting products or discounts. These operations can only be done directly on the database.
+- If you need to quickly explore the database you can run the command `npx drizzle-kit studio` to open an UI in your browser.
+
 ## Improvements
 
 - **Testing Enhancements:**
@@ -144,11 +157,14 @@ curl -X POST http://localhost:3000/api/v1/cart/checkout \
 
 - **Security Enhancements:**
 
-  - Protect the Swagger API Explorer with authentication or VPN.
-  - Implement role-based access control (RBAC) for endpoints.
+  - Remove Swagger Explorer in production.
+  - Implement authentication.
+
+- **Cart saving:**
+
+  - It would be a good idea to save cart on db for later use.
 
 - **Performance Optimizations:**
   - Introduce caching mechanisms for frequently accessed product data.
-  - Optimize database queries to improve response times.
-
-This improved documentation provides clearer structure, improved readability, and separates future improvements into a dedicated section.
+  - Use nginx as a reverse proxy to handle incoming requests and distribute them to different instances of the application (Load balancing).
+    - OR use NodeJs cluster module to take advantage of multi-core systems.
