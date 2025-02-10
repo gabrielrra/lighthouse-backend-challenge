@@ -11,3 +11,5 @@ export const listProductsQuerySchema = z.object({
 export const listProductsSchema = z.object({
   query: listProductsQuerySchema,
 });
+
+export type ListProductsQuery = z.infer<typeof listProductsQuerySchema>

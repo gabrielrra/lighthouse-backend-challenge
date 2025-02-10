@@ -3,6 +3,7 @@ import { type CartProduct } from '../validators/cart.validator';
 import * as productService from '../services/product.service';
 import * as productDiscountService from '../services/productDiscount.service';
 import { formatCurrency } from '../utils/formatCurrency';
+import { logger } from 'src/utils/logger';
 
 function mergeRepeated(products: CartProduct[]) {
   const newProducts: CartProduct[] = [];
@@ -35,7 +36,7 @@ export async function calculateCartPrice(products: CartProduct[]) {
     const product = productsInfo.find(pr => pr.sku === p.sku);
 
     if (!product) {
-      console.error('Invalid cart product', p);
+      logger.error('Invalid cart product', p);
       continue;
     }
 
@@ -52,7 +53,7 @@ export async function calculateCartPrice(products: CartProduct[]) {
         case 'BUY_X_PAY_Y':
           {
             if (!discount.source_product_units || !discount.discount_unit) {
-              console.warn('Invalid product discount', discount);
+              logger.warn('Invalid product discount', discount);
               break;
             };
 
@@ -70,13 +71,13 @@ export async function calculateCartPrice(products: CartProduct[]) {
         case 'BUNDLE':
           {
             if (!discount.target_product_sku || !discount.discount_unit) {
-              console.warn('Invalid product discount', discount);
+              logger.warn('Invalid product discount', discount);
               break;
             };
 
             const targetProduct = productsInfo.find(p => p.sku === discount.target_product_sku)!;
             if (!targetProduct) {
-              console.error('Target product for discount not found', discount);
+              logger.error('Target product for discount not found', discount);
               break;
             };
 
@@ -96,7 +97,7 @@ export async function calculateCartPrice(products: CartProduct[]) {
         case 'BULK_DISCOUNT':
           {
             if (!discount.source_product_units || !discount.discount_percentage) {
-              console.warn('Invalid product discount', discount);
+              logger.warn('Invalid product discount', discount);
               break;
             };
 

@@ -1,9 +1,9 @@
 import * as cartService from '../services/cart.service';
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 
 
-export async function checkout(req: Request, res: Response) {
-  const checkoutPrices = await cartService.calculateCartPrice(req.body);
+export async function checkout(req: Request, res: Response, next: NextFunction) {
+  const checkoutPrices = await cartService.calculateCartPrice(req.body).catch(next);
 
   res.json(checkoutPrices);
 }
