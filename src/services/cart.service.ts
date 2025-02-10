@@ -26,7 +26,15 @@ export async function calculateCartPrice(products: CartProduct[]) {
   const allDiscounts = await productDiscountService.search({ product_skus: productSkus });
   productSkus = [...allDiscounts.map(d => d.target_product_sku), ...productSkus];
   productSkus = [...new Set(productSkus)];
-  const productsInfo = await productService.search({ skus: productSkus });
+
+  const { data: productsInfo } = await productService.search({
+    page: 1,
+    limit: 1000,
+    filters: {
+      skus: productSkus
+    }
+  });
+
   let totalPrice = 0;
   let totalDiscount = 0;
   const warns = [];

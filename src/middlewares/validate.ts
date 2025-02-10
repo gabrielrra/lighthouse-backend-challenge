@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { ZodSchema } from "zod";
+import { ValidatedBadRequestError } from "../utils/httpErrors";
 
 const validate =
   (schema: ZodSchema) =>
@@ -10,9 +11,9 @@ const validate =
           query: req.query,
           params: req.params,
         });
-        next();
+        return next();
       } catch (err: any) {
-        return res.status(400).json({ error: err.errors });
+        return next(new ValidatedBadRequestError(err.errors));
       }
     };
 

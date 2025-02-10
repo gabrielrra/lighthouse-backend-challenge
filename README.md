@@ -83,6 +83,41 @@ curl http://localhost:3000/api/v1/product
 curl http://localhost:3000/api/v1/product?page=1&limit=10
 ```
 
+#### Search Products
+
+- **POST** `/product/search` - Search products with filters
+- **Request Body:**
+  - `page` (optional) - Page number (minimum: 1)
+  - `limit` (optional) - Items per page (minimum: 1)
+  - `filters` (optional) - Search filters
+    - `skus` - Array of product SKUs to filter
+
+**Example:**
+
+```json
+{
+  "page": 1,
+  "limit": 10,
+  "filters": {
+    "skus": ["GR1", "SR1"]
+  }
+}
+```
+
+**cURL Request:**
+
+```bash
+curl -X POST http://localhost:3000/api/v1/product/search \
+  -H "Content-Type: application/json" \
+  -d '{
+    "page": 1,
+    "limit": 10,
+    "filters": {
+      "skus": ["GR1", "SR1"]
+    }
+  }'
+```
+
 #### Get Product by SKU
 
 - **GET** `/product/:sku` - Retrieves a product by its SKU.

@@ -47,6 +47,57 @@
         }
       }
     },
+    "/v1/product/search": {
+      "post": {
+        "description": "Search products",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "sku",
+                "quantity"
+              ],
+              "properties": {
+                "page": {
+                  "type": "number",
+                  "minimum": 1
+                },
+                "limit": {
+                  "type": "number",
+                  "minimum": 1
+                },
+                "filters": {
+                  "type": "object",
+                  "properties": {
+                    "skus": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved products list"
+          },
+          "400": {
+            "description": "Invalid query parameters"
+          },
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/v1/product/{sku}": {
       "get": {
         "description": "",
@@ -80,7 +131,10 @@
               "type": "array",
               "items": {
                 "type": "object",
-                "required": ["sku", "quantity"],
+                "required": [
+                  "sku",
+                  "quantity"
+                ],
                 "properties": {
                   "sku": {
                     "type": "string",

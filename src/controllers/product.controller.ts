@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { findAllAndCount, findOne } from '../services/product.service';
+import { findAllAndCount, findOne, search } from '../services/product.service';
 import { type ListProductsQuery } from '../validators/product.validator';
 import { NotFoundError } from '../utils/httpErrors';
 
@@ -24,4 +24,10 @@ export async function getProduct(req: Request, res: Response, next: NextFunction
     return next(new NotFoundError("Oops! We couldn't find the product you're looking for. Please check the SKU and try again."));
 
   return res.json(product);
+}
+
+export async function searchProducts(req: Request, res: Response, next: NextFunction) {
+  const products = await search(req.body).catch(next);
+
+  return res.json(products);
 }
