@@ -34,7 +34,11 @@ describe('Product Service', () => {
   });
 
   it('should search products by SKUs', async () => {
-    const results = await productService.search({ skus: ['TSHIRT', 'MUG'] });
+    const { data: results } = await productService.search({
+      filters: { skus: ['TSHIRT', 'MUG'] },
+      page: 1,
+      limit: 100
+    });
 
     expect(results).toHaveLength(2);
     expect(results.map(p => p.sku)).toContain('TSHIRT');

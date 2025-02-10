@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { logger } from '../utils/logger';
-import { CustomHttpError } from 'src/utils/httpErrors';
+import { CustomHttpError } from '../utils/httpErrors';
 
 export function errorHandler(error: Error, req: Request, res: Response, next: NextFunction) {
   logger.error(error.stack);
