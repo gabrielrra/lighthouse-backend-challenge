@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { findAllAndCount, findOne } from '../services/product.service';
 import { type ListProductsQuery } from '../validators/product.validator';
-import { NotFoundError } from 'src/utils/httpErrors';
+import { NotFoundError } from '../utils/httpErrors';
 
 export async function listProducts(req: Request<{}, {}, {}, ListProductsQuery>, res: Response, next: NextFunction) {
   let page = parseInt(req.query.page || '1');

@@ -3,7 +3,7 @@ import { type CartProduct } from '../validators/cart.validator';
 import * as productService from '../services/product.service';
 import * as productDiscountService from '../services/productDiscount.service';
 import { formatCurrency } from '../utils/formatCurrency';
-import { logger } from 'src/utils/logger';
+import { logger } from '../utils/logger';
 
 function mergeRepeated(products: CartProduct[]) {
   const newProducts: CartProduct[] = [];

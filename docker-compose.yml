@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   app:
     build:
@@ -13,7 +11,7 @@ services:
       - DB_URL=file:dist/db/db.sqlite
     restart: unless-stopped
     volumes:
-      - db-data:/dist/db
+      - db-data:/dist/db/db.sqlite
 
 volumes:
   db-data:
